@@ -125,7 +125,7 @@ All structures manage dynamic memory explicitly. Deep copy semantics are impleme
 
 We use template for each data structure, but in memory diagrams we take integer as an example.
 
-![DynamicArray Memory Diagram](Images/DynamicArray.jpeg)
+![DynamicArray Memory Diagram](Images/DynamicArray_Memory.jpeg)
 
 ![LinkedList Memory Diagram](Images/LinkedList_Memory.jpeg)
 
