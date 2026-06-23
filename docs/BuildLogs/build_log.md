@@ -85,7 +85,7 @@ Outcome:
 Successfully completed the DynamicArray implementation and verified that it works correctly for primitive data types. Discovered that `malloc()`, `realloc()`, and `free()` only manage raw memory and do not invoke constructors or destructors. As a result, `std::string` and other non-trivial user-defined types are not properly initialized. Future improvements will require placement new, explicit destructor calls, or switching to `new` and `delete` to support complex object types correctly.
 
 
-# Session 4
+## Session 4
 
 **Date:** 23-06-2026
 
@@ -185,3 +185,44 @@ All major functions were tested successfully:
 * DynamicArray working correctly with primitive and object types
 
 
+
+## Session 5
+
+**Date:** 23-06-2026
+
+**Duration:** 60 min
+
+## Work Completed
+
+* Started implementation of the `LinkedList` data structure using C++ templates.
+* Designed the internal `Node` structure to store element data and a pointer to the next node.
+* Declared and initialized core member variables (`head`, `tail`, and `size`).
+* Implemented the default constructor to create an empty linked list.
+* Implemented the destructor to ensure proper memory cleanup.
+* Developed the `clear()` method to delete all nodes and reset the list state.
+* Implemented `pushFront()` to insert elements at the beginning of the list.
+* Implemented `pushBack()` to insert elements at the end of the list.
+* Added utility methods `getSize()` and `isEmpty()`.
+
+## Build Status
+
+* LinkedList base structure implemented successfully.
+* Constructor, destructor, insertion, and cleanup operations are functional.
+* Source code compiles successfully without errors.
+* Initial testing confirms correct node insertion and memory deallocation.
+
+## Challenges / Notes
+
+* Transitioned from C-style memory management (`malloc`/`free`) to C++ memory management (`new`/`delete`) to support complex data types correctly.
+* Ensured that dynamically allocated nodes are properly released to prevent memory leaks.
+* Verified that using `new` allows constructors to be invoked automatically for stored objects.
+* Maintained generic template support for both primitive and non-primitive data types.
+
+## Planned Tasks
+
+* Implement element insertion at arbitrary positions using `insert()`.
+* Implement node removal operations (`removeFront()`, `removeBack()`, and `removeAt()`).
+* Add element access through `get()`.
+* Implement the `contains()` search function.
+* Develop copy constructor and copy assignment operator to satisfy the Rule of Three.
+* Create comprehensive test cases for all LinkedList operations.
