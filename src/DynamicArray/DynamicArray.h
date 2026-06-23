@@ -31,4 +31,43 @@ public:
     void clear();
 };
 
+
+template<typename T>
+DynamicArray<T>::DynamicArray() {
+    size = 0;
+    capacity = 4;
+
+    data = (T*)malloc(capacity * sizeof(T));
+
+    if(data == nullptr)
+        throw std::bad_alloc();
+}
+
+template<typename T>
+DynamicArray<T>::~DynamicArray(){
+    free(data);
+}
+
+template<typename T>
+void DynamicArray<T>::resize(int newCapacity){
+
+    T* temp = (T*)realloc(data, newCapacity * sizeof(T));
+    if(temp == nullptr)
+        throw std::bad_alloc();
+    
+    data = temp;
+    capacity = newCapacity;
+}
+
+template<typename T>
+void DynamicArray<T>::append(const T& value){
+    if(size == capacity)
+    {
+        int newCapacity = (int) (capacity * 1.4);
+        resize(newCapacity);
+    }
+    data[size++] = value;
+}
+
+
 #endif
