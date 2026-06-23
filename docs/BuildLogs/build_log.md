@@ -87,7 +87,7 @@ Successfully completed the DynamicArray implementation and verified that it work
 
 # Session 4
 
-**Date:** 24-06-2026
+**Date:** 23-06-2026
 
 **Duration:** 120 min
 
