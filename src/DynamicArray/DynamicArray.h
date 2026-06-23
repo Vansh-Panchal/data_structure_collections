@@ -2,6 +2,7 @@
 #define DYNAMIC_ARRAY_H
 
 #include <cstdlib>
+#include <cmath>
 #include <stdexcept>
 
 template<typename T>
@@ -63,11 +64,82 @@ template<typename T>
 void DynamicArray<T>::append(const T& value){
     if(size == capacity)
     {
-        int newCapacity = (int) (capacity * 1.4);
+        int newCapacity = (int) std::ceil(capacity * 1.4);
         resize(newCapacity);
     }
     data[size++] = value;
 }
 
+template<typename T>
+void DynamicArray<T>::insert(int index, const T& value)
+{
+    if(index < 0 || index > size)
+        throw std::out_of_range("Index out of range");
+    
+    if(size == capacity)
+    {
+        int newCapacity = (int) std::ceil(capacity * 1.4);
+        resize(newCapacity);
+    }
+
+    for(int i=size; i>index; i--)
+    {
+        data[i] = data[i-1];
+    }
+
+    data[index] = value;
+    size++;
+}
+
+template<typename T>
+void DynamicArray<T>::remove(int index)
+{
+    if(index < 0 || index >= size)
+        throw std::out_of_range("Index out of range");
+    
+    for(int i=index; i<size-1; i++)
+    {
+        data[i] = data[i+1];
+    }
+    size--;
+}
+
+template<typename T>
+T& DynamicArray<T>::get(int index)
+{
+    if(index < 0 || index >= size)
+        throw std::out_of_range("Index out of range");
+    
+    return data[index];
+}
+
+template<typename T>
+void DynamicArray<T>::set(int index, const T& value)
+{
+    if(index < 0 || index >= size)
+        throw std::out_of_range("Index out of range");
+    
+    data[index] = value;
+}
+
+template<typename T>
+int DynamicArray<T>::getSize() const{
+    return size;
+}
+
+template<typename T>
+int DynamicArray<T>::getCapacity() const{
+    return capacity;
+}
+
+template<typename T>
+bool DynamicArray<T>::isEmpty() const{
+    return size == 0;
+}
+
+template<typename T>
+void DynamicArray<T>::clear(){
+    size = 0;
+}
 
 #endif
