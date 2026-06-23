@@ -4,12 +4,13 @@
 #include <cstdlib>
 #include <cmath>
 #include <stdexcept>
+#include <new>
 
-template<typename T>
+template <typename T>
 class DynamicArray
 {
 private:
-    T* data;
+    T *data;
     int size;
     int capacity;
 
@@ -19,12 +20,16 @@ public:
     DynamicArray();
     ~DynamicArray();
 
-    void append(const T& value);
-    void insert(int index, const T& value);
+    DynamicArray(const DynamicArray &other);
+
+    DynamicArray &operator=(const DynamicArray &other);
+
+    void append(const T &value);
+    void insert(int index, const T &value);
     void remove(int index);
 
-    T& get(int index);
-    void set(int index, const T& value);
+    T &get(int index);
+    void set(int index, const T &value);
 
     int getSize() const;
     int getCapacity() const;
@@ -32,113 +37,222 @@ public:
     void clear();
 };
 
-
-template<typename T>
-DynamicArray<T>::DynamicArray() {
+template <typename T>
+DynamicArray<T>::DynamicArray()
+{
     size = 0;
     capacity = 4;
 
-    data = (T*)malloc(capacity * sizeof(T));
+    data = static_cast<T *>(malloc(capacity * sizeof(T)));
 
-    if(data == nullptr)
+    if (data == nullptr)
+    {
         throw std::bad_alloc();
+    }
+
+    for (int i = 0; i < capacity; i++)
+    {
+        new (&data[i]) T();
+    }
 }
 
-template<typename T>
-DynamicArray<T>::~DynamicArray(){
+template <typename T>
+DynamicArray<T>::~DynamicArray()
+{
+    for (int i = 0; i < capacity; i++)
+    {
+        data[i].~T();
+    }
+
     free(data);
 }
 
-template<typename T>
-void DynamicArray<T>::resize(int newCapacity){
+template <typename T>
+DynamicArray<T>::DynamicArray(const DynamicArray &other)
+{
+    size = other.size;
+    capacity = other.capacity;
 
-    T* temp = (T*)realloc(data, newCapacity * sizeof(T));
-    if(temp == nullptr)
+    data = static_cast<T *>(
+        malloc(capacity * sizeof(T)));
+
+    if (data == nullptr)
+    {
         throw std::bad_alloc();
-    
-    data = temp;
+    }
+
+    for (int i = 0; i < capacity; i++)
+    {
+        new (&data[i]) T();
+    }
+
+    for (int i = 0; i < size; i++)
+    {
+        data[i] = other.data[i];
+    }
+}
+
+template <typename T>
+DynamicArray<T> &DynamicArray<T>::operator=(
+    const DynamicArray &other)
+{
+    if (this == &other)
+    {
+        return *this;
+    }
+
+    for (int i = 0; i < capacity; i++)
+    {
+        data[i].~T();
+    }
+
+    free(data);
+
+    size = other.size;
+    capacity = other.capacity;
+
+    data = static_cast<T *>(
+        malloc(capacity * sizeof(T)));
+
+    if (data == nullptr)
+    {
+        throw std::bad_alloc();
+    }
+
+    for (int i = 0; i < capacity; i++)
+    {
+        new (&data[i]) T();
+    }
+
+    for (int i = 0; i < size; i++)
+    {
+        data[i] = other.data[i];
+    }
+
+    return *this;
+}
+
+template <typename T>
+void DynamicArray<T>::resize(int newCapacity)
+{
+    T *newData =
+        static_cast<T *>(malloc(newCapacity * sizeof(T)));
+
+    if (newData == nullptr)
+    {
+        throw std::bad_alloc();
+    }
+
+    for (int i = 0; i < newCapacity; i++)
+    {
+        new (&newData[i]) T();
+    }
+
+    for (int i = 0; i < size; i++)
+    {
+        newData[i] = data[i];
+    }
+
+    for (int i = 0; i < capacity; i++)
+    {
+        data[i].~T();
+    }
+
+    free(data);
+
+    data = newData;
     capacity = newCapacity;
 }
 
-template<typename T>
-void DynamicArray<T>::append(const T& value){
-    if(size == capacity)
+template <typename T>
+void DynamicArray<T>::append(const T &value)
+{
+    if (size == capacity)
     {
-        int newCapacity = (int) std::ceil(capacity * 1.4);
+        int newCapacity = (int)std::ceil(capacity * 1.4);
         resize(newCapacity);
     }
     data[size++] = value;
 }
 
-template<typename T>
-void DynamicArray<T>::insert(int index, const T& value)
+template <typename T>
+void DynamicArray<T>::insert(int index, const T &value)
 {
-    if(index < 0 || index > size)
+    if (index < 0 || index > size)
         throw std::out_of_range("Index out of range");
-    
-    if(size == capacity)
+
+    if (size == capacity)
     {
-        int newCapacity = (int) std::ceil(capacity * 1.4);
+        int newCapacity = (int)std::ceil(capacity * 1.4);
         resize(newCapacity);
     }
 
-    for(int i=size; i>index; i--)
+    for (int i = size; i > index; i--)
     {
-        data[i] = data[i-1];
+        data[i] = data[i - 1];
     }
 
     data[index] = value;
     size++;
 }
 
-template<typename T>
+template <typename T>
 void DynamicArray<T>::remove(int index)
 {
-    if(index < 0 || index >= size)
+    if (index < 0 || index >= size)
         throw std::out_of_range("Index out of range");
-    
-    for(int i=index; i<size-1; i++)
+
+    for (int i = index; i < size - 1; i++)
     {
-        data[i] = data[i+1];
+        data[i] = data[i + 1];
     }
     size--;
 }
 
-template<typename T>
-T& DynamicArray<T>::get(int index)
+template <typename T>
+T &DynamicArray<T>::get(int index)
 {
-    if(index < 0 || index >= size)
+    if (index < 0 || index >= size)
         throw std::out_of_range("Index out of range");
-    
+
     return data[index];
 }
 
-template<typename T>
-void DynamicArray<T>::set(int index, const T& value)
+template <typename T>
+void DynamicArray<T>::set(int index, const T &value)
 {
-    if(index < 0 || index >= size)
+    if (index < 0 || index >= size)
         throw std::out_of_range("Index out of range");
-    
+
     data[index] = value;
 }
 
-template<typename T>
-int DynamicArray<T>::getSize() const{
+template <typename T>
+int DynamicArray<T>::getSize() const
+{
     return size;
 }
 
-template<typename T>
-int DynamicArray<T>::getCapacity() const{
+template <typename T>
+int DynamicArray<T>::getCapacity() const
+{
     return capacity;
 }
 
-template<typename T>
-bool DynamicArray<T>::isEmpty() const{
+template <typename T>
+bool DynamicArray<T>::isEmpty() const
+{
     return size == 0;
 }
 
-template<typename T>
-void DynamicArray<T>::clear(){
+template <typename T>
+void DynamicArray<T>::clear()
+{
+    for (int i = 0; i < capacity; i++)
+    {
+        data[i].~T();
+    }
+
     size = 0;
 }
 
