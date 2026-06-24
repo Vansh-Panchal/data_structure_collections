@@ -63,12 +63,76 @@ public:
 };
 
 template<>
+class DefaultHasher<bool>
+{
+public:
+
+    int hash(const bool& key,int bucketCount) const
+    {
+        return (key ? 1 : 0) % bucketCount;
+    }
+};
+
+template<>
+class DefaultHasher<long>
+{
+public:
+
+    int hash(const long& key,int bucketCount) const
+    {
+        long value = key;
+
+        if(value < 0)
+        {
+            value = -value;
+        }
+
+        return value % bucketCount;
+    }
+};
+
+template<>
+class DefaultHasher<long long>
+{
+public:
+
+    int hash(const long long& key,int bucketCount) const
+    {
+        long long value = key;
+
+        if(value < 0)
+        {
+            value = -value;
+        }
+
+        return value % bucketCount;
+    }
+};
+
+template<>
+class DefaultHasher<float>
+{
+public:
+
+    int hash(const float& key,int bucketCount) const
+    {
+        float value = key;
+        if(value < 0)
+        {
+            value = -value;
+        }
+        int scaledValue = static_cast<int>(value * 1000);
+
+        return scaledValue % bucketCount;
+    }
+};
+
+template<>
 class DefaultHasher<std::string>
 {
 public:
 
-    int hash(const std::string& key,
-             int bucketCount) const
+    int hash(const std::string& key, int bucketCount) const
     {
         unsigned long hash = 0;
 
@@ -176,5 +240,105 @@ bool HashMap<K,V>::isEmpty() const
 {
     return currentSize == 0;
 }
+
+template<typename K, typename V>
+void HashMap<K,V>::put(const K& key,const V& value)
+{
+    int index = hashFunction(key);
+
+    LinkedList<Entry<K,V>>& bucket =
+        buckets.get(index);
+
+    for(int i = 0; i < bucket.getSize(); i++)
+    {
+        if(bucket.get(i).key == key)
+        {
+            bucket.get(i).value = value;
+            return;
+        }
+    }
+
+    bucket.pushBack(
+        Entry<K,V>(key,value)
+    );
+
+    currentSize++;
+}
+
+template<typename K, typename V>
+V HashMap<K,V>::get(const K& key) const
+{
+    int index = hashFunction(key);
+
+    const LinkedList<Entry<K,V>>& bucket =
+        buckets.get(index);
+
+    for(int i = 0; i < bucket.getSize(); i++)
+    {
+        if(bucket.get(i).key == key)
+        {
+            return bucket.get(i).value;
+        }
+    }
+
+    throw std::runtime_error("Key not found");
+}
+
+template<typename K, typename V>
+bool HashMap<K,V>::containsKey(
+    const K& key
+) const
+{
+    int index = hashFunction(key);
+
+    const LinkedList<Entry<K,V>>& bucket =
+        buckets.get(index);
+
+    for(int i = 0; i < bucket.getSize(); i++)
+    {
+        if(bucket.get(i).key == key)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+template<typename K, typename V>
+void HashMap<K,V>::remove(
+    const K& key
+)
+{
+    int index = hashFunction(key);
+
+    LinkedList<Entry<K,V>>& bucket =
+        buckets.get(index);
+
+    for(int i = 0; i < bucket.getSize(); i++)
+    {
+        if(bucket.get(i).key == key)
+        {
+            bucket.removeAt(i);
+
+            currentSize--;
+
+            return;
+        }
+    }
+}
+
+template<typename K, typename V>
+void HashMap<K,V>::clear()
+{
+    for(int i = 0; i < bucketCount; i++)
+    {
+        buckets.get(i).clear();
+    }
+
+    currentSize = 0;
+}
+
+
 
 #endif

@@ -40,6 +40,7 @@ public:
     void removeAt(int index);
 
     T& get(int index);
+    const T& get(int index) const;
 
     bool contains(const T& value) const;
 
@@ -62,7 +63,7 @@ LinkedList<T>::LinkedList(const LinkedList& other)
     head = nullptr;
     tail = nullptr;
     size = 0;
-    
+
     Node* current = other.head;
 
     while(current != nullptr)
@@ -263,6 +264,24 @@ T& LinkedList<T>::get(int index)
 }
 
 template<typename T>
+const T& LinkedList<T>::get(int index) const
+{
+    if(index < 0 || index >= size)
+    {
+        throw std::out_of_range("Index out of range");
+    }
+
+    Node* current = head;
+
+    for(int i = 0; i < index; i++)
+    {
+        current = current->next;
+    }
+
+    return current->data;
+}
+
+template<typename T>
 bool LinkedList<T>::contains(const T& value) const
 {
     Node* current = head;
@@ -307,5 +326,6 @@ void LinkedList<T>::clear()
     tail = nullptr;
     size = 0;
 }
+
 
 #endif

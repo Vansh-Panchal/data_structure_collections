@@ -1,53 +1,70 @@
 #include <iostream>
+#include <string>
 #include "HashMap.h"
 
 using namespace std;
 
 int main()
 {
-    cout << "Constructor Test" << endl;
+    // int
+    HashMap<int,string> intMap;
+    intMap.put(101,"Ali");
+    cout << "int: " << intMap.get(101) << endl;
 
-    HashMap<int,string> map1;
+    // char
+    HashMap<char,int> charMap;
+    charMap.put('A',90);
+    cout << "char: " << charMap.get('A') << endl;
 
-    cout << "Size: " << map1.size() << endl;
-    cout << "Is Empty: "
-         << (map1.isEmpty() ? "Yes" : "No")
+    // bool
+    HashMap<bool,string> boolMap;
+    boolMap.put(true,"Passed");
+    cout << "bool: " << boolMap.get(true) << endl;
+
+    // long
+    HashMap<long,string> longMap;
+    longMap.put(100000L,"Long Value");
+    cout << "long: " << longMap.get(100000L) << endl;
+
+    // long long
+    HashMap<long long,string> longLongMap;
+    longLongMap.put(9999999999LL,"Long Long Value");
+    cout << "long long: "
+         << longLongMap.get(9999999999LL)
          << endl;
 
-    cout << "\n Copy Constructor Test " << endl;
+    // float
+    HashMap<float,string> floatMap;
+    floatMap.put(3.14f,"Pi");
+    cout << "float: " << floatMap.get(3.14f) << endl;
 
-    HashMap<int,string> map2(map1);
-
-    cout << "Size: " << map2.size() << endl;
-    cout << "Is Empty: "
-         << (map2.isEmpty() ? "Yes" : "No")
+    // double
+    HashMap<double,string> doubleMap;
+    doubleMap.put(2.71828,"Euler");
+    cout << "double: "
+         << doubleMap.get(2.71828)
          << endl;
 
-    cout << "\n Assignment Operator Test " << endl;
-
-    HashMap<int,string> map3;
-
-    map3 = map1;
-
-    cout << "Size: " << map3.size() << endl;
-    cout << "Is Empty: "
-         << (map3.isEmpty() ? "Yes" : "No")
+    // unsigned int
+    HashMap<unsigned int,string> uintMap;
+    uintMap.put(50U,"Unsigned Int");
+    cout << "unsigned int: "
+         << uintMap.get(50U)
          << endl;
 
-    cout << "\n Different Template Types " << endl;
+    // unsigned long
+    HashMap<unsigned long,string> ulongMap;
+    ulongMap.put(5000UL,"Unsigned Long");
+    cout << "unsigned long: "
+         << ulongMap.get(5000UL)
+         << endl;
 
-    HashMap<char,double> charMap;
+    // string
     HashMap<string,int> stringMap;
-
-    cout << "charMap Empty: "
-         << (charMap.isEmpty() ? "Yes" : "No")
+    stringMap.put("Ali",101);
+    cout << "string: "
+         << stringMap.get("Ali")
          << endl;
-
-    cout << "stringMap Empty: "
-         << (stringMap.isEmpty() ? "Yes" : "No")
-         << endl;
-
-    cout << "\nAll Session 1 tests passed." << endl;
 
     return 0;
 }
