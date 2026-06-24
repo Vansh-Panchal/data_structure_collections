@@ -8,14 +8,15 @@ class LinkedList
 {
 private:
 
-    struct Node
+    class Node
     {
+    public:
         T data;
         Node* next;
 
-        Node(const T& value)
-            : data(value), next(nullptr)
-        {
+        Node(const T& value){
+            data = value;
+            next = nullptr;
         }
     };
 
@@ -34,8 +35,8 @@ public:
     void pushBack(const T& value);
     void insert(int index, const T& value);
 
-    bool removeFront();
-    bool removeBack();
+    void removeFront();
+    void removeBack();
     void removeAt(int index);
 
     T& get(int index);
@@ -61,7 +62,7 @@ LinkedList<T>::LinkedList(const LinkedList& other)
     head = nullptr;
     tail = nullptr;
     size = 0;
-
+    
     Node* current = other.head;
 
     while(current != nullptr)
@@ -162,10 +163,10 @@ void LinkedList<T>::insert(int index, const T& value)
 }
 
 template<typename T>
-bool LinkedList<T>::removeFront()
+void LinkedList<T>::removeFront()
 {
     if(isEmpty())
-        return false;
+        return ;
 
     Node* temp = head;
 
@@ -178,14 +179,14 @@ bool LinkedList<T>::removeFront()
     if(size == 0)
         tail = nullptr;
 
-    return true;
+    return ;
 }
 
 template<typename T>
-bool LinkedList<T>::removeBack()
+void LinkedList<T>::removeBack()
 {
     if(isEmpty())
-        return false;
+        return ;
 
     if(size == 1)
     {
@@ -195,7 +196,7 @@ bool LinkedList<T>::removeBack()
         tail = nullptr;
         size = 0;
 
-        return true;
+        return ;
     }
 
     Node* current = head;
@@ -211,8 +212,7 @@ bool LinkedList<T>::removeBack()
     tail->next = nullptr;
 
     size--;
-
-    return true;
+    
 }
 
 template<typename T>

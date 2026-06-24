@@ -43,7 +43,7 @@ DynamicArray<T>::DynamicArray()
     size = 0;
     capacity = 4;
 
-    data = static_cast<T *>(malloc(capacity * sizeof(T)));
+    data = static_cast<T*>(malloc(capacity * sizeof(T)));
 
     if (data == nullptr)
     {
@@ -73,8 +73,7 @@ DynamicArray<T>::DynamicArray(const DynamicArray &other)
     size = other.size;
     capacity = other.capacity;
 
-    data = static_cast<T *>(
-        malloc(capacity * sizeof(T)));
+    data = static_cast<T*>(malloc(capacity * sizeof(T)));
 
     if (data == nullptr)
     {
@@ -93,8 +92,7 @@ DynamicArray<T>::DynamicArray(const DynamicArray &other)
 }
 
 template <typename T>
-DynamicArray<T> &DynamicArray<T>::operator=(
-    const DynamicArray &other)
+DynamicArray<T> &DynamicArray<T>::operator=(const DynamicArray &other)
 {
     if (this == &other)
     {
@@ -111,8 +109,7 @@ DynamicArray<T> &DynamicArray<T>::operator=(
     size = other.size;
     capacity = other.capacity;
 
-    data = static_cast<T *>(
-        malloc(capacity * sizeof(T)));
+    data = static_cast<T*>(malloc(capacity * sizeof(T)));
 
     if (data == nullptr)
     {
@@ -135,8 +132,8 @@ DynamicArray<T> &DynamicArray<T>::operator=(
 template <typename T>
 void DynamicArray<T>::resize(int newCapacity)
 {
-    T *newData =
-        static_cast<T *>(malloc(newCapacity * sizeof(T)));
+    T* newData =
+        static_cast<T*>(malloc(newCapacity * sizeof(T)));
 
     if (newData == nullptr)
     {
