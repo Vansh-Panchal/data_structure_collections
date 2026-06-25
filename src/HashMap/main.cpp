@@ -4,66 +4,107 @@
 
 using namespace std;
 
+class Student
+{
+private:
+    int rollNo;
+    string name;
+
+public:
+
+    Student()
+    {
+        rollNo = 0;
+        name = "";
+    }
+
+    Student(int rollNo,const string& name)
+    {
+        this->rollNo = rollNo;
+        this->name = name;
+    }
+
+    bool operator==(const Student& other) const
+    {
+        return rollNo == other.rollNo;
+    }
+};
+
 int main()
 {
-    // int
-    HashMap<int,string> intMap;
-    intMap.put(101,"Ali");
-    cout << "int: " << intMap.get(101) << endl;
+    HashMap<Student,string> students;
 
-    // char
-    HashMap<char,int> charMap;
-    charMap.put('A',90);
-    cout << "char: " << charMap.get('A') << endl;
+    students.put(
+        Student(101,"Ali"),
+        "Computer Science"
+    );
 
-    // bool
-    HashMap<bool,string> boolMap;
-    boolMap.put(true,"Passed");
-    cout << "bool: " << boolMap.get(true) << endl;
+    students.put(
+        Student(102,"Ahmed"),
+        "Software Engineering"
+    );
 
-    // long
-    HashMap<long,string> longMap;
-    longMap.put(100000L,"Long Value");
-    cout << "long: " << longMap.get(100000L) << endl;
+    students.put(
+        Student(103,"Sara"),
+        "Artificial Intelligence"
+    );
 
-    // long long
-    HashMap<long long,string> longLongMap;
-    longLongMap.put(9999999999LL,"Long Long Value");
-    cout << "long long: "
-         << longLongMap.get(9999999999LL)
+    students.put(
+        Student(104,"Usman"),
+        "Cyber Security"
+    );
+
+    students.put(
+        Student(105,"Ayesha"),
+        "Data Science"
+    );
+
+    cout << "Size: "
+         << students.size()
          << endl;
 
-    // float
-    HashMap<float,string> floatMap;
-    floatMap.put(3.14f,"Pi");
-    cout << "float: " << floatMap.get(3.14f) << endl;
-
-    // double
-    HashMap<double,string> doubleMap;
-    doubleMap.put(2.71828,"Euler");
-    cout << "double: "
-         << doubleMap.get(2.71828)
+    cout << "Load Factor: "
+         << students.loadFactor()
          << endl;
 
-    // unsigned int
-    HashMap<unsigned int,string> uintMap;
-    uintMap.put(50U,"Unsigned Int");
-    cout << "unsigned int: "
-         << uintMap.get(50U)
+    cout << "\nDepartment of Student 103: "
+         << students.get(
+                Student(103,"Sara")
+            )
          << endl;
 
-    // unsigned long
-    HashMap<unsigned long,string> ulongMap;
-    ulongMap.put(5000UL,"Unsigned Long");
-    cout << "unsigned long: "
-         << ulongMap.get(5000UL)
+    cout << "\nContains Student 102: "
+         << students.containsKey(
+                Student(102,"Ahmed")
+            )
          << endl;
 
-    // string
-    HashMap<string,int> stringMap;
-    stringMap.put("Ali",101);
-    cout << "string: "
-         << stringMap.get("Ali")
+    students.remove(
+        Student(102,"Ahmed")
+    );
+
+    cout << "\nAfter Remove" << endl;
+
+    cout << "Contains Student 102: "
+         << students.containsKey(
+                Student(102,"Ahmed")
+            )
+         << endl;
+
+    cout << "Size: "
+         << students.size()
+         << endl;
+
+    students.clear();
+
+    cout << "\nAfter Clear" << endl;
+
+    cout << "Size: "
+         << students.size()
+         << endl;
+
+    cout << "Is Empty: "
+         << students.isEmpty()
          << endl;
 
     return 0;

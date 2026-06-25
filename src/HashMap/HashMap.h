@@ -1,6 +1,8 @@
 #ifndef HASHMAP_H
 #define HASHMAP_H
 
+#include <cmath>
+#include <stdexcept>
 #include <string>
 #include "../DynamicArray/DynamicArray.h"
 #include "../LinkedList/LinkedList.h"
@@ -160,6 +162,8 @@ private:
 
     int hashFunction(const K& key) const;
 
+    void rehash();
+
 public:
 
     HashMap();
@@ -168,21 +172,21 @@ public:
 
     HashMap& operator=(const HashMap& other);
 
-    ~HashMap();
-
     void put(const K& key,const V& value);
 
-    V get(const K& key) const;
+    bool get(const K& key,V& value) const;
 
     bool containsKey(const K& key) const;
 
-    void remove(const K& key);
+    bool remove(const K& key);
 
     void clear();
 
     int size() const;
 
     bool isEmpty() const;
+
+    double loadFactor() const;
 };
 
 template<typename K, typename V>
@@ -218,15 +222,60 @@ HashMap<K,V>& HashMap<K,V>::operator=(const HashMap& other)
     return *this;
 }
 
-template<typename K, typename V>
-HashMap<K,V>::~HashMap()
-{
-}
 
 template<typename K, typename V>
 int HashMap<K,V>::hashFunction(const K& key) const
 {
     return hasher.hash(key,bucketCount);
+}
+
+template<typename K, typename V>
+void HashMap<K,V>::rehash()
+{
+    int oldBucketCount = bucketCount;
+
+    DynamicArray<LinkedList<Entry<K,V>>> oldBuckets =
+        buckets;
+
+    bucketCount =
+        static_cast<int>(
+            std::ceil(bucketCount * 1.4)
+        );
+
+    DynamicArray<LinkedList<Entry<K,V>>> newBuckets;
+
+    for(int i = 0; i < bucketCount; i++)
+    {
+        newBuckets.append(
+            LinkedList<Entry<K,V>>()
+        );
+    }
+
+    buckets = newBuckets;
+
+    currentSize = 0;
+
+    for(int i = 0; i < oldBucketCount; i++)
+    {
+        LinkedList<Entry<K,V>>& bucket =
+            oldBuckets.get(i);
+
+        for(int j = 0; j < bucket.getSize(); j++)
+        {
+            Entry<K,V> entry =
+                bucket.get(j);
+
+            int index =
+                hasher.hash(
+                    entry.key,
+                    bucketCount
+                );
+
+            buckets.get(index).pushBack(entry);
+
+            currentSize++;
+        }
+    }
 }
 
 template<typename K, typename V>
@@ -263,10 +312,15 @@ void HashMap<K,V>::put(const K& key,const V& value)
     );
 
     currentSize++;
+
+    if(loadFactor() >= 0.75)
+    {
+        rehash();
+    }
 }
 
 template<typename K, typename V>
-V HashMap<K,V>::get(const K& key) const
+bool HashMap<K,V>::get(const K& key,V& value) const
 {
     int index = hashFunction(key);
 
@@ -277,11 +331,12 @@ V HashMap<K,V>::get(const K& key) const
     {
         if(bucket.get(i).key == key)
         {
-            return bucket.get(i).value;
+            value = bucket.get(i).value;
+            return true;
         }
     }
 
-    throw std::runtime_error("Key not found");
+    return false;
 }
 
 template<typename K, typename V>
@@ -306,7 +361,7 @@ bool HashMap<K,V>::containsKey(
 }
 
 template<typename K, typename V>
-void HashMap<K,V>::remove(
+bool HashMap<K,V>::remove(
     const K& key
 )
 {
@@ -323,9 +378,11 @@ void HashMap<K,V>::remove(
 
             currentSize--;
 
-            return;
+            return true;
         }
     }
+
+    return false;
 }
 
 template<typename K, typename V>
@@ -339,6 +396,11 @@ void HashMap<K,V>::clear()
     currentSize = 0;
 }
 
-
+template<typename K, typename V>
+double HashMap<K,V>::loadFactor() const
+{
+    return (double)currentSize /
+           bucketCount;
+}
 
 #endif

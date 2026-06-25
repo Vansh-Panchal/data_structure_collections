@@ -259,3 +259,87 @@ expected primary-expression before '>' token
 **Outcome:**  
 
 Core HashMap functionality was completed successfully. All major operations (`put`, `get`, `containsKey`, `remove`, and `clear`) are working correctly using separate chaining. The const-related compilation errors were resolved by modifying the DynamicArray and LinkedList implementations, and the HashMap now supports a wider range of primitive key types.
+
+
+## Session 1
+
+**Date:** 25-06-2026
+
+**Duration:** 120 minutes
+
+**Goal:**
+Implement the core HashMap operations and add support for dynamic resizing through rehashing.
+
+**Problems Encountered:**
+
+* Needed a better way to indicate success/failure in `get()` and `remove()`.
+* Had to ensure rehashing correctly redistributes existing entries.
+* Needed support for both primitive and user-defined data types.
+
+**What I Tried:**
+
+* Implemented:
+
+  * `put()`
+  * `get()`
+  * `containsKey()`
+  * `remove()`
+  * `clear()`
+  * `loadFactor()`
+  * `rehash()`
+
+* Added automatic rehashing when load factor reaches `0.75`.
+
+* Increased bucket count using:
+
+  ```cpp
+  ceil(bucketCount * 1.4)
+  ```
+
+* Added custom hashers for:
+
+  * int
+  * char
+  * bool
+  * long
+  * long long
+  * float
+  * std::string
+
+* Tested HashMap with primitive and user-defined data types.
+
+**Design Updates:**
+
+* Changed:
+
+  ```cpp
+  V get(const K& key) const;
+  ```
+
+  to:
+
+  ```cpp
+  bool get(const K& key,V& value) const;
+  ```
+
+* Changed:
+
+  ```cpp
+  void remove(const K& key);
+  ```
+
+  to:
+
+  ```cpp
+  bool remove(const K& key);
+  ```
+
+This allows methods to return success/failure without using exceptions.
+
+**Outcome:**
+
+* Collision handling using separate chaining is working.
+* Load factor calculation and automatic rehashing are implemented.
+* Primitive data types are distributed across buckets using specialized hashers.
+* User-defined types are supported through the default hasher.
+* Core HashMap functionality is now completed and ready for further improvements.
