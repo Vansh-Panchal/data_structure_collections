@@ -11,6 +11,7 @@
 template <typename K, typename V>
 class Entry
 {
+public:
     K key;
     V value;
 
@@ -31,8 +32,7 @@ class DefaultHasher
 public:
     int hash(const K &key, int bucketCount) const
     {
-        const unsigned char *bytes =
-            reinterpret_cast<const unsigned char *>(&key);
+        const unsigned char *bytes = reinterpret_cast<const unsigned char *>(&key);
 
         unsigned long hash = 0;
 
@@ -194,7 +194,6 @@ private:
     void rehash();
 
 public:
-
     HashMap();
 
     HashMap(const HashMap &other);

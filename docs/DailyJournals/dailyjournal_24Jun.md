@@ -81,7 +81,7 @@ To resolve these issues, I updated the DynamicArray and LinkedList implementatio
 The hand-drawn memory diagram submitted with today's work represents the internal memory layout of the LinkedList implementation.
 
 ```md
-![LinkedList Memory Diagram](Images/24Jun_LinkedListMemory.jpeg)
+![LinkedList Memory Diagram](Images/24Jun_MemoryLayout.jpeg)
 ```
 
 ### Memory Analysis

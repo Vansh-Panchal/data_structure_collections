@@ -7,6 +7,12 @@
 
 using namespace std;
 
+struct Student
+{
+    int age;
+    char grade;
+};
+
 int main()
 {
     cout << "Data Structure Collections Test\n";
@@ -59,6 +65,15 @@ int main()
     {
         cout << "Physics not found" << endl;
     }
+
+    // HashMap for User defined data type
+    DefaultHasher<Student> hasher;
+
+    Student s{21, 'A'};
+
+    std::cout << "sizeof(Student) = " << sizeof(Student) << std::endl;
+    std::cout << "Hash = " << hasher.hash(s, 20) << std::endl;
+
 
     return 0;
 }

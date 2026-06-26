@@ -8,9 +8,7 @@ HashMap<K,V>::HashMap()
 
     for(int i = 0; i < bucketCount; i++)
     {
-        buckets.append(
-            LinkedList<Entry<K,V>>()
-        );
+        buckets.append(LinkedList<Entry<K,V>>());
     }
 }
 
@@ -40,14 +38,9 @@ HashMap<K,V>& HashMap<K,V>::operator=(
 }
 
 template<typename K, typename V>
-int HashMap<K,V>::hashFunction(
-    const K& key
-) const
+int HashMap<K,V>::hashFunction(const K& key) const
 {
-    return hasher.hash(
-        key,
-        bucketCount
-    );
+    return hasher.hash(key,bucketCount);
 }
 
 template<typename K, typename V>
